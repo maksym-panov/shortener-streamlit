@@ -54,10 +54,10 @@ df = load_data()
 if df.empty:
     st.stop()
 
-st.sidebar.header("Параметри фільтрації")
+st.sidebar.header("Filtering params")
 
 platforms = df['platform'].unique()
-selected_platforms = st.sidebar.multiselect("Платформи", platforms, default=platforms)
+selected_platforms = st.sidebar.multiselect("Platforms", platforms, default=platforms)
 
 statuses = df['status_code'].unique()
 selected_statuses = st.sidebar.multiselect("HTTP Status", statuses, default=statuses)
@@ -75,22 +75,22 @@ avg_latency = df_filtered['latency_ms'].mean()
 error_rate = (len(df_filtered[df_filtered['status_code'] >= 400]) / total_reqs * 100) if total_reqs > 0 else 0
 unique_users = df_filtered['ip_address'].nunique()
 
-col1.metric("Всього запитів", f"{total_reqs:,}")
-col2.metric("Середня Latency", f"{avg_latency:.1f} ms", delta_color="inverse")
+col1.metric("Total Requests", f"{total_reqs:,}")
+col2.metric("Mean Latency", f"{avg_latency:.1f} ms", delta_color="inverse")
 col3.metric("Error Rate", f"{error_rate:.2f}%", delta_color="inverse")
-col4.metric("Унікальні IP", f"{unique_users:,}")
+col4.metric("Unique IPs", f"{unique_users:,}")
 
 st.markdown("---")
 
 tab_geo, tab_perf, tab_feature, tab_biz = st.tabs([
-    "Географія та Пристрої",
+    "Geography and Devices",
     "Performance & Reliability",
     "Feature Engineering",
-    "Бізнес-метрики"
+    "Business Metrics"
 ])
 
 with tab_geo:
-    st.subheader("Геопросторовий розподіл трафіку")
+    st.subheader("Geospatial distribution of traffic")
 
     row1_col1, row1_col2 = st.columns([2, 1])
 
@@ -125,7 +125,7 @@ with tab_geo:
         st.plotly_chart(fig_sun, use_container_width=True)
 
 with tab_perf:
-    st.subheader("Аналіз продуктивності системи")
+    st.subheader("System performance analysis")
 
     col_p1, col_p2 = st.columns([2, 1])
 
@@ -195,7 +195,7 @@ with tab_perf:
     st.plotly_chart(fig_heat, use_container_width=True)
 
 with tab_feature:
-    st.header("Конструювання ознак для ML")
+    st.header("Feature engineering for ML")
 
     df_features = df_filtered.copy()
 
@@ -229,7 +229,7 @@ with tab_feature:
         st.plotly_chart(fig_corr, use_container_width=True)
 
 with tab_biz:
-    st.header("Бізнес-аналіз")
+    st.header("Business Analysis")
 
     link_counts = df_filtered['short_code'].value_counts().reset_index()
     link_counts.columns = ['short_code', 'clicks']

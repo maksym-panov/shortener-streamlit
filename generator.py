@@ -14,9 +14,9 @@ NUM_URLS = 1000
 NUM_CLICKS = 200000
 START_DATE = datetime.now() - timedelta(days=90)
 
-print(f"Початок генерації {NUM_CLICKS} записів...")
+print(f"Started generation of {NUM_CLICKS} records...")
 
-print(f"1. Створення бази користувачів та посилань...")
+print(f"1. Creating base of users and links...")
 
 user_ids = [str(uuid.uuid4()) for _ in range(NUM_USERS)]
 domains = ['github.com', 'google.com', 'medium.com', 'youtube.com', 'aws.amazon.com', 'dou.ua', 'rozetka.com.ua',
@@ -45,7 +45,7 @@ df_urls = pd.DataFrame(urls_data)
 df_urls.to_csv('urls_metadata.csv', index=False)
 print("urls_metadata.csv створено.")
 
-print(f"2. Генерація потоку кліків (Smart Geo Distribution)...")
+print(f"2. Generating clicks stream (Smart Geo Distribution)...")
 
 countries_map = {
     'UA': 0.45,
@@ -109,7 +109,7 @@ df_clicks = pd.DataFrame({
 df_clicks.sort_values(by='timestamp', inplace=True)
 
 df_clicks.to_csv('clicks_stream.csv', index=False)
-print(f"clicks_stream.csv створено ({len(df_clicks)} записів).")
-print(f"Статистика країн:")
+print(f"clicks_stream.csv created ({len(df_clicks)} records).")
+print(f"Countries stats:")
 print(df_clicks['country_code'].value_counts(normalize=True).head(5))
-print("Готово")
+print("Done!")
